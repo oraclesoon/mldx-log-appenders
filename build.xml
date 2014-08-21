@@ -22,11 +22,30 @@
 	<property name="src.dir" value="${basedir}/src/main/java"/>
 	<property name="api.file" value="${dist.dir}/${ant.project.name}.jar"/>
 
+	<!--
+	################################################################################### 
+	# CLASSPATH
+	###################################################################################
+	-->
+	<path id="classpath">
+		<fileset dir="lib">
+			<include name="**/*.jar" />
+		</fileset>
+		<dirset dir="${classes.dir}">
+		</dirset>
+	</path>
+
 	<target name="init">
+    		<mkdir dir="${classes.dir}"/>
 		<delete file="${api.file}"/>		
 	</target>
 	
-	<target name="jar" depends="init">
+	<target name="compile">
+		<echo>Compiling sources...</echo>
+		<javac includeantruntime="false" srcdir="${src.dir}" destdir="${classes.dir}" classpathref="classpath" debug="true" encoding="UTF-8" />
+	</target>
+
+	<target name="jar" depends="init,compile">
 		<jar destfile="${api.file}">
 			<fileset dir="${classes.dir}" includes="com/r573/mldx/**/*.class" />
 		</jar>
